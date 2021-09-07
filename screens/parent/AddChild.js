@@ -3,18 +3,21 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput } from "r
 
 import { tailwind } from "../../Tailwind";
 
-function AddChild(params, { addChild }) {
+function AddChild({ addChild }) {
   const [name, setName] = useState();
   const [allowance, setAllowance] = useState();
-  const [interest, setInterest] = useState();
+  const [interestrate, setInterest] = useState();
+  const [password, setPassword] = useState();
 
   const handlesubmit = () => {
-    let child = {
+    const child = {
       name,
-      allowance,
-      interest,
+      password,
+      allowance: parseInt(allowance),
+      interestrate: parseInt(interestrate),
     };
     setName("");
+    setPassword("");
     setAllowance("");
     setInterest("");
     addChild(child);
@@ -22,10 +25,15 @@ function AddChild(params, { addChild }) {
 
   return (
     <View style={tailwind("flex-1 bg-gray-100 py-5 px-5")}>
-      <Text>Lägg till ett barn </Text>
+      <Text style={tailwind("text-2xl mt-4")}>Lägg till ett barn</Text>
+
+      <Text style={tailwind("text-l")}>
+        Barnet kan efter du skapat hen i din app ladda ned appen och fylla i sitt namn och det
+        lösenord du givit. Efter inloggning kommer hen inte behöva logga in igen.
+      </Text>
       <View style={tailwind("pt-5 ")}>
         <TextInput
-          style={tailwind("rounded-md py-3 px-6 mt-5 border-1 bg-white border-2 border-gray-300")}
+          style={tailwind("rounded-md py-3 px-6 mt-5 bg-white border-2 border-gray-300")}
           onChangeText={setName}
           value={name}
           placeholder={"Namn"}
@@ -33,7 +41,7 @@ function AddChild(params, { addChild }) {
         />
 
         <TextInput
-          style={tailwind("rounded-md py-3 px-6 mt-5 border-1 bg-white border-2 border-gray-300")}
+          style={tailwind("rounded-md py-3 px-6 mt-5  bg-white border-2 border-gray-300")}
           onChangeText={setAllowance}
           value={allowance}
           placeholder={"Månadspeng"}
@@ -41,11 +49,19 @@ function AddChild(params, { addChild }) {
         />
 
         <TextInput
-          style={tailwind("rounded-md py-3 px-6 mt-5 border-1 bg-white border-2 border-gray-300")}
+          style={tailwind("rounded-md py-3 px-6 mt-5  bg-white border-2 border-gray-300")}
           onChangeText={setInterest}
-          value={interest}
+          value={interestrate}
           placeholder={"Ränta"}
           keyboardType="numeric"
+        />
+
+        <TextInput
+          style={tailwind("rounded-md py-3 px-6 mt-5  bg-white border-2 border-gray-300")}
+          onChangeText={setPassword}
+          value={password}
+          placeholder={"Lösenord"}
+          keyboardType="text"
         />
         <TouchableOpacity
           style={tailwind("bg-gray-900 rounded-3xl mt-5")}

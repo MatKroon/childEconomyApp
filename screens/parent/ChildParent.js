@@ -3,18 +3,21 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput } from "r
 
 import { tailwind } from "../../Tailwind";
 
-function ChildParent(params) {
-  const [child, setChild] = useState(params.route.params);
-  const [actions, setActions] = useState([
-    { id: 1, title: "Tvättat", kind: "work", value: 100 },
-    { id: 2, title: "Insättning", kind: "Insättning", value: 200 },
-    { id: 3, title: "Diskat", kind: "work", value: 100 },
-  ]);
+function ChildParent(props) {
+  const [child, setChild] = useState(props.route.params);
+  const [actions, setActions] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/products")
-      .then((resp) => resp.json())
-      .then((p) => setProducts(p));
+    const fetchObj = {
+      method: "GET",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTYzMDc3ODAxMH0.5pni0uXGTPllz_gfzZ1ZZ8GUyAsV6Kx-8l50_mSNNjw",
+      },
+    };
+    fetch(`http://localhost:3000/api/services/${child.id}`, fetchObj)
+      .then((response) => response.json())
+      .then((actions) => setActions(actions));
     return () => {
       //   editChild(child);
     };
@@ -62,7 +65,11 @@ function ChildParent(params) {
         <View style={tailwind("flex-grow")}></View>
         <Text style={tailwind("flex-grow-0 text-lg font-bold")}>{child.funds} kr</Text>
       </View>
-      <View style={tailwind("pt-5 ")}>
+      <View>
+        <Text style={tailwind("text-base font-bold mt-4")}>Tjänster och instättningar</Text>
+
+        <Text style={tailwind("text-l")}></Text>
+
         <FlatList
           style={tailwind("")}
           data={actions}
@@ -80,20 +87,20 @@ function ChildParent(params) {
             </View>
           )}
         />
-
+        <Text style={tailwind("text-base font-bold mt-8")}>Månadspeng</Text>
         <TextInput
-          style={tailwind("rounded-md py-3 px-6 mt-5 border-1 bg-white border-2 border-gray-300")}
+          style={tailwind("rounded-md py-3 px-6  bg-white border-2 border-gray-300")}
           onChangeText={changeAllowance}
           value={child.allowance}
           placeholder={`${child.allowance}`}
           keyboardType="numeric"
         />
-
+        <Text style={tailwind("text-base font-bold mt-4")}>Ränta på kapital</Text>
         <TextInput
-          style={tailwind("rounded-md py-3 px-6 mt-5 border-1 bg-white border-2 border-gray-300")}
+          style={tailwind("rounded-md py-3 px-6  bg-white border-2 border-gray-300")}
           onChangeText={changeInterest}
-          value={child.interest}
-          placeholder={`${child.interest}`}
+          value={child.interestrate}
+          placeholder={`${child.interestrate}`}
           keyboardType="numeric"
         />
       </View>
@@ -101,21 +108,4 @@ function ChildParent(params) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#E8EAED",
-  },
-  tasksWrapper: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  items: {
-    marginTop: 30,
-  },
-});
 export default ChildParent;

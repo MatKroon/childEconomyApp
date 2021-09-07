@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { tailwind } from "../../Tailwind";
 
-function ServicesParent(params) {
-  const [actions, setActions] = useState([
-    { id: 1, title: "Tvättat", kind: "work", value: 100 },
-    { id: 2, title: "Insättning", kind: "Insättning", value: 200 },
-    { id: 3, title: "Diskat", kind: "work", value: 100 },
-  ]);
+function ServicesParent(props) {
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/products")
-      .then((resp) => resp.json())
-      .then((p) => setProducts(p));
-    return () => {
-      //   editChild(child);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const fetchObj = {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${props.token}`,
+  //     },
+  //   };
+  //   fetch("http://localhost:3000/api/services/", fetchObj)
+  //     .then((response) => response.json())
+  //     .then((services) => props.setServices(services));
+  //   return () => {
+  //     //   editChild(child);
+  //   };
+  // }, []);
 
   const reject = (id) => {
     setActions(actions.filter((a) => a.id !== id));
@@ -32,7 +35,7 @@ function ServicesParent(params) {
       <View style={tailwind("pt-5 ")}>
         <FlatList
           style={tailwind("")}
-          data={actions}
+          data={props.services}
           renderItem={({ item }) => (
             <View style={tailwind("flex-row")}>
               <Text style={tailwind("flex-grow-0")}>{item.title}</Text>
@@ -49,26 +52,16 @@ function ServicesParent(params) {
             </View>
           )}
         />
+        <TouchableOpacity
+          style={tailwind("bg-gray-900 rounded-3xl mt-5")}
+          onPress={() => navigation.navigate("AddService")}
+          accessibilityLabel="Learn more about this purple button"
+        >
+          <Text style={tailwind("text-center text-white text-xl p-2")}>Lägg till tjänst</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#E8EAED",
-  },
-  tasksWrapper: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  items: {
-    marginTop: 30,
-  },
-});
 export default ServicesParent;
